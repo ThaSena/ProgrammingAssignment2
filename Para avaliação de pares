@@ -1,0 +1,25 @@
+makeCacheMatrix  <- function(x = matrix()) {
+        m <- NULL
+        setmatriz <- function(y) {
+                x <<- y
+                m <<- NULL
+        }
+        getmatrix <- function() x
+        setinverse <- function(mean) m <<- mean
+        getinverse <- function() m
+        list(setmatrix = setmatrix, getmatrix = getmatrix,
+             setinverse = setinverse,
+             getinverse = getinverse)
+}
+
+cacheSolve <- function(x=matrix(), ...) {
+        m <- x$getinverse()
+        if(!is.null(m)) {
+                if (x$setmatrix() == x$getmatrix())
+                return(m)
+        }
+        y <- x$getmatrix()
+        m <- cacheSolve(y, ...)
+        x$setinverse(m)
+        m
+}
